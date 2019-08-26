@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="./static/css/index.css">
+    <title>Pro Display</title>
+</head>
+<body>
+    <div id="app">
+        <div class="toggle-tab">
+            <el-radio-group v-model="isCollapse" style="margin-bottom: 20px;" @change="onToggleTab">
+                <el-radio-button :label="false">展开</el-radio-button>
+                <el-radio-button :label="true">收起</el-radio-button>
+            </el-radio-group>
+        </div>
+        <div class="clear"></div>
+        <el-menu @select="tabSelect" default-active="1-4-1" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+            <el-submenu index="1">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">前端</span>
+                </template>
+                <el-menu-item-group>
+                    <span slot="title">项目</span>
+                    <el-menu-item index="1-1">选项1</el-menu-item>
+                    <el-menu-item index="1-2">选项2</el-menu-item>
+                </el-menu-item-group>
+                <el-menu-item-group title="测试">
+                    <el-menu-item index="1-3">选项3</el-menu-item>
+                    <el-submenu index="1-4">
+                        <span slot="title">杂项</span>
+                        <el-menu-item index="1-4-1">选项1</el-menu-item>
+                    </el-submenu>
+                </el-menu-item-group>
+                <el-menu-item-group title="笔记">
+                    <el-menu-item index="1-5">选项3</el-menu-item>
+                    <el-submenu index="1-6">
+                        <span slot="title">Vue</span>
+                        <el-menu-item index="1-6-1">笔记</el-menu-item>
+                    </el-submenu>
+                </el-menu-item-group>
+            </el-submenu>
+            <el-submenu index="2">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">PHP</span>
+                </template>
+                <el-menu-item-group title="项目">                    
+                    <el-menu-item index="2-1">选项1</el-menu-item>
+                    <el-menu-item index="2-2">选项2</el-menu-item>
+                </el-menu-item-group>
+                <el-menu-item-group title="测试">
+                    <el-menu-item index="2-3">选项3</el-menu-item>
+                </el-menu-item-group>
+                <el-submenu index="2-4">   
+                    <span slot="title">脚本</span>
+                    <el-menu-item index="2-4-1">选项1</el-menu-item>
+                </el-submenu>
+            </el-submenu>
+            <el-submenu index="3">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>
+                    <span slot="title">Linux</span>
+                </template>
+                <el-menu-item-group title="笔记">
+                    <el-menu-item index="3-1">选项1</el-menu-item>
+                    <el-menu-item index="3-2">选项2</el-menu-item>
+                </el-menu-item-group>
+                <el-menu-item-group title="命令">
+                    <el-menu-item index="3-3">选项3</el-menu-item>
+                </el-menu-item-group>
+                <el-submenu index="3-4">
+                    <span slot="title">脚本</span>
+                    <el-menu-item index="3-4-1">选项1</el-menu-item>
+                </el-submenu>
+            </el-submenu>
+        </el-menu>
+
+        <div class="main-box">
+            <iframe :width="iframeW" :height="iframeH" :src="iframeSrc" frameborder="0"></iframe>
+        </div>
+    </div>
+</body>
+
+<style>
+    .el-menu-vertical-demo:not(.el-menu--collapse) {
+        width: 200px;
+        min-height: 400px;
+    }
+</style>
+
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data() {
+            return {
+                isCollapse: false,
+                iframeH: 600,
+                iframeW: '80%',
+                iframeSrc: './welcome.html',
+                links: {
+                    '1-1': {
+                        src: 'http://www.baidu.com'
+                    },
+                    '1-2': {
+                        src: 'http://www.qq.com'
+                    }
+                }
+            };
+        },
+        mounted() {
+            var that = this
+            this.$nextTick(function() {
+                that.iframeH = window.screen.availHeight - 170
+                var tabW = that.isCollapse ? 64 : 200
+                that.iframeW = document.body.clientWidth - tabW - 40
+            })
+        },
+        methods: {
+            handleOpen(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            handleClose(key, keyPath) {
+                console.log(key, keyPath);
+            },
+            onToggleTab (val) {
+                var that = this
+                this.$nextTick(function () {
+                    var tabW = that.isCollapse ? 64 : 200
+                    that.iframeW = document.body.clientWidth - tabW - 40
+                })                
+            },
+            tabSelect (index) {
+                this.links[index] && (this.iframeSrc = this.links[index].src)
+            }
+        }
+    });
+</script>
+</html>
